@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [error, setError] = useState('');
+  const [, setError] = useState('');
   const navigate = useNavigate();
 
   const INITIAL_VALUES = {
