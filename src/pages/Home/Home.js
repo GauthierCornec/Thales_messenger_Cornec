@@ -1,7 +1,37 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
+import home from '../../assets/home.png'
 
 const Home = () => {
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+      AsyncStorage.getItem('token').then((value) => {
+        axios.get(`http://${process.env.REACT_APP_API_URL}/users/me`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + value,
+          }
+        }).then(r => {
+          console.log(r.data);
+          setUserData(r.data);
+        }).catch(e => {
+          console.log('Erreur =>', e.response);
+        });
+      });
+    }, []);
+
+    let sortedConversations = [];
+    if (userData && userData.conversations) {
+      sortedConversations = userData.conversations.sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
     
+    // Récupération de la conversation la plus récente
+    const latestConversation = sortedConversations[0];
+
     return (
         <div className="flex-col justify-between space-y-1 lg:flex-col sm:flex-row place-content-center overflow-scroll bg-white h-screen ">
                 <div className="border border-white radius-for-skewed p-2 m-2">
@@ -10,25 +40,54 @@ const Home = () => {
                             <div className="w-full text-center lg:text-left">
                                 <div className="max-w-sm mx-auto">
                                     <h2 className="flex mb-6 text-4xl lg:text-5xl font-bold font-heading ">
-                                        <p className="text-black">Follow your evolution</p>
+                                        <p className="text-black">Tableau de bord</p>
                                     </h2>
                                 </div>
-                                <div className="max-w-sm mx-auto">
-                                    <p className="mb-6 leading-loose text-black">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque efficitur nisl sodales egestas lobortis.</p>
-                                    <div>
-                                        <a className="inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-green-600 hover:bg-green-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200" href="/login">Get Started</a>
-                                        <a className="inline-block w-full lg:w-auto py-2 px-6 leading-loose font-semibold bg-white  transition duration-200 text-black" href="/#">How it works</a></div>
+                                <div className="max-w-sm mx-auto ">
+                                <p className="mb-6 leading-loose text-black">Retrouver l'intégralité de vos échanges</p>
+                                    <div className='lg:flex flex-row'>
+                                    {userData && (
+                                    <div className='bg-gray-100 border-2 border-black rounded-lg p-4 m-8'>
+                                         <a
+                                            className="inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-grey-200  text-black font-semibold rounded-l-xl rounded-t-xl transition duration-200"
+                                            href="/messenger"
+                                            >
+                                            Vos contacts 
+                                            </a>
+                                        {userData.contacts.map((contact) => (
+                                        <div key={contact.id}>
+                                           
+                                            <p>{contact.firstName} {contact.lastName}</p>
+                                        </div>
+                                        ))}
+                                    </div>
+                                    )}
+
+                                    {userData && (
+                                    <div className='border-2 border-black rounded-lg p-4 m-8 bg-gray-100'>
+                                         <a
+                                            className=" inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-grey-200  text-black font-semibold rounded-l-xl rounded-t-xl transition duration-200"
+                                            href="/messenger"
+                                            >
+                                            Votre dernière discution 
+                                            </a>
+                                        <p>{latestConversation.name}</p>
+                                    </div>
+                                    )}
+                                    </div>
+                                   
+                                    
+                                    <div className='flex justify-center'>
+                                        <a className=" inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-green-600 hover:bg-green-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200" href="/messenger">Vos discutions</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="p-4 flex flex-col items-center justify-center w-full">
-                            {/* <img
-                                src={`https://www.airlines.iata.org/sites/default/files/event_images/web_plane_iStock-1148581150_0.png`}
-                                className="rounded-lg"
-                            ></img> */}
+                        <img className="rounded-t-xl h-fit w-fit" src={home} alt="Profile" />
+
                         </div>
-                        <Link to="/login">About</Link>
 
                     </div>
                 </div>
