@@ -88,7 +88,7 @@ const CreateConversationButton = ({ updateConversations }) => {
 
 
   return (
-    <div>
+    <div className='flex'>
       <button
         onClick={openModal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -99,8 +99,8 @@ const CreateConversationButton = ({ updateConversations }) => {
 
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
-          <div className="bg-white w-1/2 p-4 rounded">
-            <h2 className="text-xl font-bold mb-4">
+        <div className="bg-white w-1/2 p-4 rounded h-screen overflow-auto border-4 border-black">
+          <h2 className="text-xl font-bold mb-4">
               Commencer une discussion avec
             </h2>
             {userData && (
