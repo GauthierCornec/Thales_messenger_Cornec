@@ -3,6 +3,7 @@ import profile from '../../assets/profile.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import CreateConversationButton from '../../component/createConversation';
+import AddContactButton from '../../component/addContact';
 
 const Messenger = () => {
     const [userData, setUserData] = useState(null);
@@ -106,7 +107,17 @@ const Messenger = () => {
             setIsConversationSelected(false); // Set isConversationSelected to false when no conversation is selected
         }
     };
-    
+    const handleContactAdded = (newContactData) => {
+        // Here, you can update the user's contacts or perform any action
+        // with the newly added contact data
+        console.log('New contact data:', newContactData);
+        // Example: You could add the new contact data to the user's contacts
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          contacts: [...prevUserData.contacts, newContactData],
+        }));
+      };
+      
 
     return (
         
@@ -114,6 +125,8 @@ const Messenger = () => {
             <div className={`flex flex-col bg-slate-100 max-w-sm ${isConversationSelected ? 'hidden lg:block' : 'block'} h-screen px-2`}>
           <p className='font-sans text-2xl my-2'>Discussions</p>
           <CreateConversationButton updateConversations={updateConversations} />
+          <AddContactButton onContactAdded={handleContactAdded} />
+
           <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
           <div className="relative mb-4">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

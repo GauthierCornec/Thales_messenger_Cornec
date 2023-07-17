@@ -10,7 +10,6 @@ const CreateConversationButton = ({ updateConversations }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   const handleCreateConversation = (contactId) => {
     setLoading(true);
     AsyncStorage.getItem('token').then((value) => {
