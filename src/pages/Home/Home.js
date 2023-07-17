@@ -77,8 +77,8 @@ const Home = () => {
                                     </div>
                                    
                                     
-                                    <div>
-                                        <a className="inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-green-600 hover:bg-green-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200" href="/messenger">Vos discutions</a>
+                                    <div className='flex justify-center'>
+                                        <a className=" inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-green-600 hover:bg-green-700 text-white font-semibold rounded-l-xl rounded-t-xl transition duration-200" href="/messenger">Vos discutions</a>
                                     </div>
                                 </div>
                             </div>

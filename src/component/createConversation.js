@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import profile from '../assets/profile.png';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const CreateConversationButton = ({ updateConversations }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
+
 
   const handleCreateConversation = (contactId) => {
     setLoading(true);
@@ -87,15 +90,28 @@ const CreateConversationButton = ({ updateConversations }) => {
   };
 
 
+
   return (
     <div className='flex'>
-      <button
+        <div className='justify-between m-1'>
+        <button
         onClick={openModal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         disabled={loading}
       >
         {loading ? 'Chargement...' : '+'}
       </button>
+
+      <Link to="/home">
+      <button
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        disabled={loading}
+      >
+        {loading ? 'Chargement...' : 'h'}
+      </button>
+      </Link>
+        </div>
+      
 
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
