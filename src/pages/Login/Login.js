@@ -39,7 +39,7 @@ const Login = () => {
             console.log('Token saved');
 
             console.log(response.data.accessToken.jwtToken);
-            navigate('/messenger', { email: values.email, token: response.data.accessToken.jwtToken });
+            navigate('/home', { email: values.email, token: response.data.accessToken.jwtToken });
           } catch (error) {
             setError('');
             if (error.response && error.response.data.message) {
