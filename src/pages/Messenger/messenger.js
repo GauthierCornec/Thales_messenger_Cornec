@@ -3,6 +3,7 @@ import profile from '../../assets/profile.png'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import CreateConversationButton from '../../component/createConversation';
+import AddContactButton from '../../component/addContact';
 
 const Messenger = () => {
     const [userData, setUserData] = useState(null);
@@ -13,7 +14,8 @@ const Messenger = () => {
     const [selectedConversationId, setSelectedConversationId] = useState(null); // Added state for selected conversation ID
     const [selectedContactMessages, setSelectedContactMessages] = useState([]); // Added state for selected contact's messages
     const [isConversationSelected, setIsConversationSelected] = useState(false); // Added state for tracking if a conversation is selected
-  
+    const [contacts, setContacts] = useState([]);
+
     useEffect(() => {
       AsyncStorage.getItem('token').then((value) => {
         axios.get(`http://${process.env.REACT_APP_API_URL}/users/me`, {
@@ -24,6 +26,8 @@ const Messenger = () => {
         }).then(r => {
           console.log(r.data);
           setUserData(r.data);
+          setContacts(r.data.contacts);
+
         }).catch(e => {
           console.log('Erreur =>', e.response);
         });
@@ -106,7 +110,18 @@ const Messenger = () => {
             setIsConversationSelected(false); // Set isConversationSelected to false when no conversation is selected
         }
     };
-    
+
+  // Updated function to handle adding a new contact
+    const handleContactAdded = (newContactData) => {
+    // Update the contact list state with the new contact data
+    setContacts((prevContacts) => [...prevContacts, newContactData]);
+  };
+      
+    // Function to update the contact list
+    const updateContactsList = (newContactData) => {
+        // Update the contact list state with the new contact data
+        setContacts((prevContacts) => [...prevContacts, newContactData]);
+      };
 
     return (
         
@@ -114,6 +129,8 @@ const Messenger = () => {
             <div className={`flex flex-col bg-slate-100 max-w-sm ${isConversationSelected ? 'hidden lg:block' : 'block'} h-screen px-2`}>
           <p className='font-sans text-2xl my-2'>Discussions</p>
           <CreateConversationButton updateConversations={updateConversations} />
+          <AddContactButton onContactAdded={handleContactAdded} updateContactsList={updateContactsList} />
+
           <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
           <div className="relative mb-4">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

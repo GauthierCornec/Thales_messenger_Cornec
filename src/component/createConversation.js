@@ -10,7 +10,6 @@ const CreateConversationButton = ({ updateConversations }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
 
-
   const handleCreateConversation = (contactId) => {
     setLoading(true);
     AsyncStorage.getItem('token').then((value) => {
@@ -89,11 +88,18 @@ const CreateConversationButton = ({ updateConversations }) => {
     document.body.classList.remove('overflow-hidden');
   };
 
+  const handleContactAdded = (newContactData) => {
+    // Ajouter le nouveau contact à la liste des contacts de l'utilisateur
+    setUserData((prevUserData) => ({
+        ...prevUserData,
+        contacts: [...prevUserData.contacts, newContactData],
+    }));
+};
 
 
   return (
     <div className='flex'>
-        <div className='justify-between m-1'>
+        <div className='space-x-2 m-1'>
         <button
         onClick={openModal}
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -107,7 +113,7 @@ const CreateConversationButton = ({ updateConversations }) => {
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         disabled={loading}
       >
-        {loading ? 'Chargement...' : 'h'}
+        {loading ? 'Chargement...' : 'Home'}
       </button>
       </Link>
         </div>
@@ -115,7 +121,7 @@ const CreateConversationButton = ({ updateConversations }) => {
 
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
-        <div className="bg-white w-1/2 p-4 rounded h-screen overflow-auto border-4 border-black">
+        <div className="bg-white w-2/3 p-4 rounded h-screen overflow-auto border-4 border-black">
           <h2 className="text-xl font-bold mb-4">
               Commencer une discussion avec
             </h2>
