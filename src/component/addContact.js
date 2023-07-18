@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const AddContactButton = ({ onContactAdded }) => {
+const AddContactButton = ({ onContactAdded, updateContactsList }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [userData, setUserData] = useState(null);
   const contactSchema = Yup.object().shape({
@@ -29,6 +29,8 @@ const AddContactButton = ({ onContactAdded }) => {
           console.log('Contact créé avec succès !', response.data);
           closeModal();
           onContactAdded(response.data);
+          updateContactsList(response.data); // Call the updateContactsList function from props
+
         })
         .catch((error) => {
           console.log(error);
@@ -71,7 +73,7 @@ const AddContactButton = ({ onContactAdded }) => {
   };
 
   return (
-    <div>
+    <div className='m-1'>
       <button
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={openModal}
@@ -80,7 +82,7 @@ const AddContactButton = ({ onContactAdded }) => {
       </button>
       {modalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
-          <div className="bg-white w-1/2 p-4 rounded h-screen overflow-auto border-4 border-black">
+          <div className="bg-white w-2/3 p-4 rounded h-screen overflow-auto border-4 border-black">
             <h2 className="text-xl font-bold mb-4">Ajouter un contact</h2>
             <Formik
               initialValues={{
