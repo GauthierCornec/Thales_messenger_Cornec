@@ -15,7 +15,14 @@ const Messenger = () => {
     const [selectedContactMessages, setSelectedContactMessages] = useState([]); // Added state for selected contact's messages
     const [isConversationSelected, setIsConversationSelected] = useState(false); // Added state for tracking if a conversation is selected
     const [contacts, setContacts] = useState([]);
-
+    const botResponses = [
+        "Hello!",
+        "How can I assist you?",
+        "Nice to chat with you!",
+        "What can I do for you today?",
+        "I'm here to help!",
+      ];
+      
     useEffect(() => {
       AsyncStorage.getItem('token').then((value) => {
         axios.get(`http://${process.env.REACT_APP_API_URL}/users/me`, {
@@ -28,11 +35,22 @@ const Messenger = () => {
           setUserData(r.data);
           setContacts(r.data.contacts);
 
+             // Check if a conversation is selected, then fetch its messages
+      if (selectedConversationId) {
+        const selectedConversation = r.data.conversations.find(conversation => conversation.id === selectedConversationId);
+        if (selectedConversation) {
+          setSelectedContactInfo(selectedConversation.contact);
+          setSelectedContactMessages(selectedConversation.messages);
+          setIsConversationSelected(true);
+        }
+      }
+
         }).catch(e => {
           console.log('Erreur =>', e.response);
         });
       });
-    }, []);
+    }, [selectedConversationId]);
+
   
     const updateConversations = (newConversation) => {
       setUserData((prevUserData) => {
@@ -85,10 +103,19 @@ const Messenger = () => {
       createdAt: Date.now()
     };
     setSelectedContactMessages((prevMessages) => [...prevMessages, newMessage]);
-
-    // Réinitialiser le champ de saisie de texte
     setMessageContent('');
-  })
+          // Simulate bot response after a short delay
+          setTimeout(() => {
+            const botResponse = {
+              id: Math.random().toString(),
+              senderId: 'bot',
+              data: botResponses[Math.floor(Math.random() * botResponses.length)],
+              createdAt: Date.now(),
+            };
+            setSelectedContactMessages((prevMessages) => [...prevMessages, botResponse]);
+          }, 1000); // Adjust the delay as needed for a more natural conversation flow
+        })
+
   .catch((error) => {
     // Gérer les erreurs de requête si nécessaire
     console.error('Erreur lors de l envoi du message', error);
@@ -210,19 +237,22 @@ const Messenger = () => {
                         hour: '2-digit',
                         minute: '2-digit',
                     });
+
+                    const isUserMessage = message.senderId === userData.id;
+
                     return (
                         <div
-                        key={message.id}
-                        className={`flex justify-end p-2 m-2 rounded-lg ${
-                            message.senderId === userData.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                        }`}
+                          key={message.id}
+                          className={`flex justify-${isUserMessage ? 'end' : 'start'} p-2 m-2 rounded-lg ${
+                            isUserMessage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+                          }`}
                         >
-                        <div className="flex flex-row justify-items-center space-x-2">
-                            <p className='mb-1'>{message.data}</p>
+                          <div className="flex flex-row justify-items-center space-x-2">
+                            <p className="mb-1">{message.data}</p>
                             <p className="text-xs text-gray-500">{formattedTime}</p>
+                          </div>
                         </div>
-                        </div>
-                    );
+                      );
                     })}
                     </div>
                     
