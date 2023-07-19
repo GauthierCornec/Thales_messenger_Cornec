@@ -229,34 +229,36 @@ const Messenger = () => {
                     </>
                     )}
                 </div>
-                <div className=" mb-12 overflow-auto h-screen">
-                    <div className='overflow-y'>
-                    {selectedContactMessages.map((message) => {
-                    const createdAt = new Date(message.createdAt);
-                    const formattedTime = createdAt.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    });
-
-                    const isUserMessage = message.senderId === userData.id;
-
-                    return (
-                        <div
-                          key={message.id}
-                          className={`flex justify-${isUserMessage ? 'end' : 'start'} p-2 m-2 rounded-lg ${
-                            isUserMessage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                          }`}
-                        >
-                          <div className="flex flex-row justify-items-center space-x-2">
-                            <p className="mb-1">{message.data}</p>
-                            <p className="text-xs text-gray-500">{formattedTime}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                    </div>
-                    
-                </div>
+                {selectedContactMessages &&
+                     <div className=" mb-12 overflow-auto h-screen">
+                     <div className='overflow-y'>
+                     {selectedContactMessages.map((message) => {
+                     const createdAt = new Date(message.createdAt);
+                     const formattedTime = createdAt.toLocaleTimeString([], {
+                         hour: '2-digit',
+                         minute: '2-digit',
+                     });
+ 
+                     const isUserMessage = message.senderId === userData.id;
+ 
+                     return (
+                         <div
+                           key={message.id}
+                           className={`flex justify-${isUserMessage ? 'end' : 'start'} p-2 m-2 rounded-lg ${
+                             isUserMessage ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+                           }`}
+                         >
+                           <div className="flex flex-row justify-items-center space-x-2">
+                             <p className="mb-1">{message.data}</p>
+                             <p className="text-xs text-gray-500">{formattedTime}</p>
+                           </div>
+                         </div>
+                       );
+                     })}
+                     </div>
+                     
+                 </div>}
+           
 
                 <div className="absolute bottom-0 left-0 flex flex-row w-full space-between">
                     <input
