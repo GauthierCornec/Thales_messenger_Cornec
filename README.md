@@ -1,6 +1,6 @@
 # This is messenger web app 
 
-You can login by using this email adress & password : gauthier.cornec@gmail.com / Humanism3!
+If you don't already have an account you can register with a valide email address because you will recieve an email to validate your account.
 
 # Getting Started with Create React App
 
