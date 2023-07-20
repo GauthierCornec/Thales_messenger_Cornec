@@ -63,16 +63,22 @@ const Home = () => {
                                     </div>
                                     )}
 
-                                    {userData && (
-                                    <div className='border-2 border-black rounded-lg p-4 m-8 bg-gray-100'>
-                                         <a
-                                            className=" inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-grey-200  text-black font-semibold rounded-l-xl rounded-t-xl transition duration-200"
-                                            href="/messenger"
+                                    {userData ? (
+                                        <div className='border-2 border-black rounded-lg p-4 m-8 bg-gray-100'>
+                                            <a
+                                                className="inline-block mb-3 lg:mb-0 lg:mr-3 w-full lg:w-auto py-2 px-6 leading-loose bg-grey-200 text-black font-semibold rounded-l-xl rounded-t-xl transition duration-200"
+                                                href="/messenger"
                                             >
-                                            Votre dernière discution 
+                                                Votre dernière discussion
                                             </a>
-                                        <p>{latestConversation.name}</p>
-                                    </div>
+                                            {latestConversation ? (
+                                                <p>{latestConversation.name}</p>
+                                            ) : (
+                                                <p>Aucune conversation actuellement</p>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <p>Loading...</p> // Or any other loading indicator
                                     )}
                                     </div>
                                    

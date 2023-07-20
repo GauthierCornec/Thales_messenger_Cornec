@@ -3,9 +3,9 @@ import * as Yup from "yup";
 import { useState } from "react";
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Register = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -30,16 +30,12 @@ const Login = () => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           try {
-            const response = await axios.post(`http://${process.env.REACT_APP_API_URL}/auth/login`, {
+                await axios.post(`http://${process.env.REACT_APP_API_URL}/auth/register`, {
               email: values.email,
               password: values.password
             }, { timeout: 10000 });
 
-            await AsyncStorage.setItem('token', response.data.accessToken.jwtToken);
-            console.log('Token saved');
-
-            console.log(response.data.accessToken.jwtToken);
-            navigate('/home', { email: values.email, token: response.data.accessToken.jwtToken });
+            navigate('/confirmCode', { email: values.email });
           } catch (error) {
             setError('');
             if (error.response && error.response.data.message) {
@@ -65,7 +61,7 @@ const Login = () => {
             <div className="w-360 mx-auto py-8">
               <div className="relative z-10 bg-white rounded-2xl max-w-[360px] mx-auto mb-20 p-10 text-center">
                 <form noValidate onSubmit={handleSubmit}>
-                  <span>Login</span>
+                  <span>Inscription</span>
                   <input
                     id="email-address"
                     name="email"
@@ -97,10 +93,9 @@ const Login = () => {
                     className="text-white font-bold text-base uppercase outline-none bg-blue-500 w-full rounded-5 py-3 px-4 transition-all duration-300 ease-cubic cursor-pointer"
                     type="submit"
                   >
-                    Login
+                    S'inscrire
                   </button>
                 </form>
-                <p>Si vous n'avez pas encore de compte, <Link to="/register">inscrivez-vous</Link>.</p>
               </div>
             </div>
           )
@@ -110,4 +105,4 @@ const Login = () => {
   );
 }
 
-export default Login;
+export default Register;
